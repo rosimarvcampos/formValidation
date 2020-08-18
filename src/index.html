@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>function validate</title>
+</head>
+<body>
+    <form name="formSend" action="http://localhost:3434/form" method="post">
+        <label for="nome">Nome: </label>
+        <input type="text" name="name" placeholder="Escreva Primeiro Nome">
+    <br>
+        <label for="sobrenome">sobrenome: </label>
+        <input type="text" name="surname" placeholder="Seu Sobrenome">
+    <br>
+        <button onclick="return validateForm(event)" type="submit">Enviar</button>
+    </form>
+    <script>
+        String.prototype.isLetter = function(){
+            if(
+                (this.charCodeAt(0) > 64 && this.charCodeAt(0) < 91) || 
+                (this.charCodeAt(0) > 96 && this.charCodeAt(0) < 123) ||
+                (this.charCodeAt(0) > 191 && this.charCodeAt(0) <= 255)
+            ) {
+                return true
+            } return false
+        }
+        
+        function validateForm(){
+            event.preventDefault()
+            const newForm = formSend;
+            const formName =  newForm.name
+            const formSurname =  newForm.surname
+            
+            function validateField(nodeStr) {
+                let isLetter = false;
+                const args = nodeStr.name == 'name' ? nodeStr.value.trim() : nodeStr.value.replace(/\s{1,}/g, '') // faz o campo  nome aceita somente o primeiro nome e campo sobrenome aceitar um ou mais nome
+                let letra = args.split('')
+                letra.every(l => l.isLetter() ? isLetter =  true : isLetter = false)
+                if(!isLetter || args == "") {
+                    nodeStr.focus()
+                    return false
+                }
+                return true
+            }
+            
+            if(!validateField(formName)) return false
+            if(!validateField(formSurname)) return false
+
+            const data = new FormData(newForm)
+            let options = {
+                method: newForm.method,
+                body: new URLSearchParams(data)
+            }
+            fetch(newForm.action, options)
+                .then(r => r.json())
+            newForm.reset()
+        }
+    </script>
+</body>
+</html>
