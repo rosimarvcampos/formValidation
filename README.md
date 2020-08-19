@@ -3,6 +3,7 @@
     entre outras palavaras sem precisar atualizar o navegador cada vez que o formulario e submetido.
     
 ## executando 
+- clone ou baixe o repositorio
 - Navegue pela a pasta do projeto, uma vez na pasta do projeto execute o comando:
 - ```npm i```
 - para pode rodar o projeto execute o comando:  
