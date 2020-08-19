@@ -4,17 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>function validate</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form name="formSend" action="http://localhost:3434/form" method="post">
-        <label for="nome">Nome: </label>
-        <input type="text" name="name" placeholder="Escreva Primeiro Nome">
-    <br>
-        <label for="sobrenome">sobrenome: </label>
-        <input type="text" name="surname" placeholder="Seu Sobrenome">
-    <br>
-        <button onclick="return validateForm(event)" type="submit">Enviar</button>
-    </form>
+    <div class="container">
+        <form name="formSend" action="http://localhost:3434/form" method="post">
+            <label for="nome">Nome</label>
+            <input type="text" name="name" placeholder="Informe Seu Primeiro Nome">
+
+            <div id="error" class="error none">Lembrete: O campo nome só aceita seu primeiro nome e ambos os campos aceitam apenas letras é não podem ser vazios!!!</div>
+
+            <label for="sobrenome">SobreNome</label>
+            <input type="text" name="surname" placeholder="Informe Seu Sobronome">
+
+            <button onclick="return validateForm(event)" type="submit">Enviar</button>
+        </form>
+    </div>
     <script>
         String.prototype.isLetter = function(){
             if(
@@ -24,7 +29,7 @@
             ) {
                 return true
             } return false
-        }
+        }   
         
         function validateForm(){
             event.preventDefault()
@@ -33,14 +38,17 @@
             const formSurname =  newForm.surname
             
             function validateField(nodeStr) {
+                const divError = document.querySelector('#error')
                 let isLetter = false;
                 const args = nodeStr.name == 'name' ? nodeStr.value.trim() : nodeStr.value.replace(/\s{1,}/g, '') // faz o campo  nome aceita somente o primeiro nome e campo sobrenome aceitar um ou mais nome
                 let letra = args.split('')
                 letra.every(l => l.isLetter() ? isLetter =  true : isLetter = false)
                 if(!isLetter || args == "") {
+                    divError.classList.remove('none')
                     nodeStr.focus()
                     return false
                 }
+                divError.classList.add('none')
                 return true
             }
             
